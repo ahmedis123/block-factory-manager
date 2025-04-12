@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>نظام إدارة مصنع طوب سركمتو - النسخة النهائية</title> <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #3498db; --primary-dark: #2980b9;
+      --success: #2ecc71; --success-dark: #27ae60;
+      --danger: #e74c3c; --danger-dark: #c0392b;
+      --warning: #f39c12; --warning-dark: #e67e22;
+      --info: #1abc9c; --info-dark: #16a085;
+      --bg: #f5f7fa; --card: #fff; --text: #2c3e50;
+      --text-light: #7f8c8d; --border: #dfe6e9;
+      --radius: 10px; --gap: 20px; --maxW: 1200px;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: var(--gap);
+    }
+
+    .container {
+      max-width: var(--maxW);
+      margin: 0 auto;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: #fff;
+      padding: 25px;
+      border-radius: var(--radius);
+      text-align: center;
+      margin-bottom: var(--gap);
+      box-shadow: var(--shadow);
+    }
+
+    h1, h2, h3 {
+      margin-bottom: 15px;
+    }
+
+    .card {
+      background: var(--card);
+      padding: var(--gap);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: var(--gap);
+      transition: var(--transition);
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--text-light);
+    }
+
+    input, select, button, textarea {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-family: inherit;
+      font-size: 16px;
+      transition: var(--transition);
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    }
+
+    button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    button:hover {
+      background: var(--primary-dark);
+    }
+
+    button i {
+      font-size: 14px;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      font-size: 14px;
+      border-radius: 5px;
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 13px;
+    }
+
+    .btn-success {
+      background: var(--success);
+    }
+
+    .btn-success:hover {
+      background: var(--success-dark);
+    }
+
+    .btn-danger {
+      background: var(--danger);
+    }
+
+    .btn-danger:hover {
+      background: var(--danger-dark);
+    }
+
+    .btn-warning {
+      background: var(--warning);
+    }
+
+    .btn-warning:hover {
+      background: var(--warning-dark);
+    }
+
+    .btn-info {
+      background: var(--info);
+    }
+
+    .btn-info:hover {
+      background: var(--info-dark);
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+      border-radius: var(--radius);
+      box-shadow: 0 0 0 1px var(--border);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: var(--gap);
+      min-width: 600px;
+    }
+
+    th, td {
+      padding: 15px;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+
+    th {
+      background: var(--primary);
+      color: white;
+      font-weight: 500;
+      position: sticky;
+      top: 0;
+    }
+
+    tr:nth-child(even) {
+      background-color: rgba(52, 152, 219, 0.05);
+    }
+
+    tr:hover {
+      background-color: rgba(52, 152, 219, 0.1);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    #toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--primary);
+      color: white;
+      padding: 15px 30px;
+      border-radius: var(--radius);
+      opacity: 0;
+      transition: var(--transition);
+      box-shadow: var(--shadow);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    #toast.show {
+      opacity: 1;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .date-range {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+      align-items: center;
+    }
+
+    .report-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .file-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--info);
+      color: white;
+      padding: 10px 15px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .file-label:hover {
+      background: var(--info-dark);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 20px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 26px;
+      font-weight: 700;
+      margin: 10px 0;
+    }
+
+    .stat-title {
+      color: var(--text-light);
+      font-size: 14px;
+    }
+
+    .search-box {
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-light);
+    }
+
+    .search-box input {
+      padding-left: 40px;
+    }
+
+    .login-container {
+      max-width: 500px;
+      margin: 50px auto;
+    }
+
+    .login-card {
+      padding: 30px;
+    }
+
+    @media (max-width: 768px) {
+      form {
+        grid-template-columns: 1fr;
+      }
+
+      .filters, .report-actions, .date-range {
+        flex-direction: column;
+      }
+
+      .date-range input, .date-range button {
+        width: 100%;
+      }
+      .stats {
+         grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="app">
+    <div class="login-container" id="loginScreen">
+      <div class="card login-card">
+        <h2 style="text-align: center;">تسجيل الدخول</h2>
+        <form id="loginForm">
+          <div class="form-group">
+            <label for="username">اسم المستخدم</label>
+            <input type="text" id="username" required placeholder="أدخل اسم المستخدم">
+          </div>
+          <div class="form-group">
+            <label for="password">كلمة المرور</label>
+            <input type="password" id="password" required placeholder="أدخل كلمة المرور">
+          </div>
+          <button type="submit" class="btn-success">
+            <i class="fas fa-sign-in-alt"></i> دخول
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div id="mainApp" class="hidden">
+      <header>
+        <h1>نظام إدارة مصنع طوب سركمتو </h1>
+        <p>إدارة الإنتاج والمخزون والنقل والحسابات بشكل متكامل</p>
+        <div>
+            <button onclick="logout()" class="btn-sm btn-danger" style="margin-top: 15px;">
+              <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+            </button>
+            <button id="toggleSettingsBtn" class="btn btn-info btn-sm" style="margin-top: 15px; margin-right: 10px;">
+              <i class="fas fa-cogs"></i> إظهار/إخفاء إعدادات الأسعار
+            </button>
+        </div>
+      </header>
+
+      <div class="card">
+        <h2><i class="fas fa-chart-line"></i> لوحة التحكم</h2>
+        <div class="stats">
+          <div class="stat-card">
+            <div class="stat-title">إجمالي العمليات</div>
+            <div class="stat-value" id="totalOperations">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-title">إجمالي الطوب المنتج</div>
+            <div class="stat-value" id="totalBricks">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-title">إجمالي قلابات الرمل</div>
+            <div class="stat-value" id="totalTrips">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-title">إجمالي أكياس السمنت</div> <div class="stat-value" id="totalCement">0</div>
+          </div>
+           <div class="stat-card">
+            <div class="stat-title">إجمالي تكلفة النقل</div>
+            <div class="stat-value" id="totalTransportCost">0 ج.م</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-title">إجمالي القيمة / التكاليف</div>
+            <div class="stat-value" id="totalValue">0 ج.م</div>
+          </div>
+        </div>
+      </div>
+
+       <div class="card hidden" id="priceSettingsCard">
+          <h2><i class="fas fa-dollar-sign"></i> إعدادات الأسعار</h2>
+          <form id="priceSettingsForm">
+              <div class="form-group">
+                  <label for="brickPriceSetting">سعر الطوب (ج.م)</label>
+                  <input type="number" id="brickPriceSetting" placeholder="أدخل سعر الطوب" min="1">
+              </div>
+              <div class="form-group">
+                  <label for="tipperPriceSetting">سعر قلاب الرمل (ج.م)</label>
+                  <input type="number" id="tipperPriceSetting" placeholder="أدخل سعر القلاب" min="1">
+              </div>
+              <button type="button" id="saveSettingsBtn" class="btn-info">
+                  <i class="fas fa-save"></i> حفظ الإعدادات
+              </button>
+          </form>
+      </div>
+
+      <div class="card">
+        <h2><i class="fas fa-plus-circle"></i> إضافة عملية</h2>
+        <form id="productionForm">
+          <div class="form-group">
+            <label for="operationType">نوع العملية</label>
+            <select id="operationType" required>
+              <option value="">اختر نوع العملية</option>
+              <option value="طوب">إنتاج طوب</option>
+              <option value="قلاب">قربلة قلاب رمل</option>
+              <option value="سمنت">استهلاك سمنت</option>
+              <option value="نقل طوب">نقل طوب</option>
+            </select>
+          </div>
+
+          <div id="brickFields" class="hidden">
+            <div class="form-group">
+              <label for="brickQuantity">عدد الطوب</label>
+              <input type="number" id="brickQuantity" placeholder="أدخل عدد الطوب المنتج" min="1">
+            </div>
+            <div class="form-group">
+              <label for="brickPrice">سعر الطوب (من الإعدادات)</label>
+              <select id="brickPrice" disabled style="background:#eee;">
+                </select>
+            </div>
+          </div>
+
+          <div id="truckFields" class="hidden">
+            <div class="form-group">
+              <label for="truckTrips">عدد القلابات</label>
+              <input type="number" id="truckTrips" placeholder="أدخل عدد القلابات" value="1" min="1">
+            </div>
+             <div class="form-group">
+                <label>سعر القلاب (من الإعدادات)</label>
+                <input type="text" id="truckPriceDisplay" readonly style="background:#eee;">
+             </div>
+          </div>
+
+          <div id="cementFields" class="hidden">
+            <div class="form-group">
+              <label for="cementQuantity">عدد أكياس السمنت</label> <input type="number" id="cementQuantity" placeholder="أدخل عدد الأكياس" min="1"> </div>
+            <div class="form-group">
+              <label for="cementPrice">سعر الكيس (ج.م)</label> <input type="number" id="cementPrice" placeholder="أدخل سعر الكيس" min="0.1" step="0.1"> </div>
+          </div>
+
+           <div id="transportFields" class="hidden">
+                <div class="form-group">
+                    <label for="transportQuantity">كمية الطوب المنقول</label>
+                    <input type="number" id="transportQuantity" placeholder="أدخل عدد الطوب" min="1">
+                </div>
+                <div class="form-group">
+                    <label for="transportCost">تكلفة النقل الإجمالية (ج.م)</label>
+                    <input type="number" id="transportCost" placeholder="أدخل تكلفة النقل" min="1">
+                </div>
+                </div>
+
+
+          <div class="form-group">
+            <label for="operationDate">تاريخ العملية</label>
+            <input type="date" id="operationDate" required>
+          </div>
+
+          <div class="form-group">
+            <label for="operationNotes">ملاحظات (اختياري)</label>
+            <textarea id="operationNotes" placeholder="أي ملاحظات إضافية عن العملية" rows="2"></textarea>
+          </div>
+
+          <button type="submit" class="btn-success">
+            <i class="fas fa-save"></i> حفظ العملية
+          </button>
+          <button type="button" onclick="resetForm()" class="btn-danger">
+            <i class="fas fa-times"></i> إلغاء
+          </button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2><i class="fas fa-chart-pie"></i> التقارير والبيانات</h2>
+
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" id="searchInput" placeholder="ابحث في العمليات (النوع, ملاحظات, تاريخ, كمية, قيمة)..."> </div>
+
+        <div class="filters">
+          <button onclick="filterData('day')" class="btn-sm">
+            <i class="fas fa-calendar-day"></i> تقرير يومي
+          </button>
+          <button onclick="filterData('week')" class="btn-sm">
+            <i class="fas fa-calendar-week"></i> تقرير أسبوعي
+          </button>
+          <button onclick="filterData('month')" class="btn-sm">
+            <i class="fas fa-calendar-alt"></i> تقرير شهري
+          </button>
+          <button onclick="filterData('all')" class="btn-sm">
+            <i class="fas fa-list"></i> عرض الكل
+          </button>
+
+          <div class="date-range">
+            <input type="date" id="startDate">
+            <input type="date" id="endDate">
+            <button onclick="filterByCustomDate()" class="btn-sm btn-info">
+              <i class="fas fa-filter"></i> فلترة حسب التاريخ
+            </button>
+          </div>
+
+          <div class="report-actions">
+            <button onclick="exportCSV()" class="btn-sm btn-warning">
+              <i class="fas fa-file-export"></i> تصدير إلى CSV
+            </button>
+            <button onclick="exportPDF()" class="btn-sm btn-danger">
+              <i class="fas fa-file-pdf"></i> تصدير إلى PDF
+            </button>
+            <label class="file-label">
+              <i class="fas fa-file-import"></i> استيراد من CSV
+              <input type="file" id="csvFile" accept=".csv" style="display: none;">
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="table-wrapper">
+          <table id="dataTable">
+            <thead>
+              <tr>
+                <th onclick="sortTable(0)">النوع <i class="fas fa-sort"></i></th>
+                <th onclick="sortTable(1)">الكمية <i class="fas fa-sort"></i></th>
+                <th onclick="sortTable(2)">السعر/للوحدة <i class="fas fa-sort"></i></th>
+                <th onclick="sortTable(3)">القيمة/التكلفة <i class="fas fa-sort"></i></th>
+                <th onclick="sortTable(4)">التاريخ <i class="fas fa-sort"></i></th>
+                <th>الملاحظات</th> <th>الإجراءات</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+        <div style="margin-top: 15px; text-align: center;">
+          <span id="paginationInfo"></span>
+          <div style="margin-top: 10px;">
+            <button onclick="prevPage()" class="btn-sm" id="prevBtn" disabled>
+              <i class="fas fa-arrow-right"></i> السابق
+            </button>
+            <button onclick="nextPage()" class="btn-sm" id="nextBtn" disabled>
+              التالي <i class="fas fa-arrow-left"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="toast"></div>
+    </div>
+  </div>
+
+  <script>
+    // --- Global Variables ---
+    let operations = [];
+    let settings = {};
+    const defaultSettings = {
+      brickPrice: 30,
+      tipperPrice: 100000
+    };
+    let currentEditId = null;
+    let currentUser = null;
+    let currentPage = 1;
+    const rowsPerPage = 10;
+    let currentSortColumn = -1;
+    let sortDirection = 1;
+    let currentFilter = 'all';
+
+    // --- Initialization ---
+    window.onload = function() {
+      checkLoginStatus();
+      setupEventListeners();
+    };
+
+    function setupEventListeners() {
+        document.getElementById('operationDate').valueAsDate = new Date();
+        document.getElementById('startDate').valueAsDate = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+        document.getElementById('endDate').valueAsDate = new Date();
+
+        document.getElementById('loginForm').addEventListener('submit', e => { e.preventDefault(); login(); });
+        document.getElementById('csvFile').addEventListener('change', e => importCSV(e.target.files[0]));
+        document.getElementById('searchInput').addEventListener('input', e => filterBySearch(e.target.value));
+
+        const operationTypeSelect = document.getElementById('operationType');
+        if (operationTypeSelect) {
+            operationTypeSelect.addEventListener('change', e => toggleOperationFields(e.target.value));
+        } else {
+            console.error("Could not find #operationType select element!");
+        }
+
+        document.getElementById('productionForm').addEventListener('submit', handleFormSubmit);
+        document.getElementById('saveSettingsBtn').addEventListener('click', saveSettings);
+
+        const toggleBtn = document.getElementById('toggleSettingsBtn');
+         if (toggleBtn) {
+             toggleBtn.addEventListener('click', () => {
+                const settingsCard = document.getElementById('priceSettingsCard');
+                if(settingsCard) {
+                   settingsCard.classList.toggle('hidden');
+                } else {
+                    console.error("Could not find #priceSettingsCard");
+                }
+            });
+         } else {
+             console.error("Could not find #toggleSettingsBtn");
+         }
+    }
+
+    // --- Authentication ---
+    function checkLoginStatus() {
+      currentUser = localStorage.getItem('currentUser');
+      if (currentUser) {
+        document.getElementById('loginScreen').classList.add('hidden');
+        document.getElementById('mainApp').classList.remove('hidden');
+        initApp();
+      } else {
+        document.getElementById('loginScreen').classList.remove('hidden');
+        document.getElementById('mainApp').classList.add('hidden');
+      }
+    }
+
+    function login() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      if (username && password) {
+        localStorage.setItem('currentUser', username);
+        currentUser = username;
+        checkLoginStatus();
+        showToast(`مرحباً ${username}! تم تسجيل الدخول بنجاح`, 'success');
+      } else {
+        showToast('الرجاء إدخال اسم المستخدم وكلمة المرور', 'danger');
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('currentUser');
+      currentUser = null;
+      operations = [];
+      settings = {};
+      checkLoginStatus();
+      showToast('تم تسجيل الخروج بنجاح', 'info');
+    }
+
+    // --- Application Initialization ---
+    function initApp() {
+        loadSettings();
+        operations = JSON.parse(localStorage.getItem('factoryData')) || [];
+        renderTable();
+        updateStats();
+    }
+
+    // --- Settings Management ---
+    function loadSettings() {
+        const storedSettings = localStorage.getItem('factorySettings');
+        settings = storedSettings ? JSON.parse(storedSettings) : {...defaultSettings};
+        settings.brickPrice = settings.brickPrice ?? defaultSettings.brickPrice;
+        settings.tipperPrice = settings.tipperPrice ?? defaultSettings.tipperPrice;
+        populateSettingsForm();
+        updateBrickPriceDropdown();
+        updateTipperPriceDisplay();
+    }
+
+    function populateSettingsForm() {
+        document.getElementById('brickPriceSetting').value = settings.brickPrice;
+        document.getElementById('tipperPriceSetting').value = settings.tipperPrice;
+    }
+
+    function saveSettings() {
+        const brickPrice = parseFloat(document.getElementById('brickPriceSetting').value);
+        const tipperPrice = parseFloat(document.getElementById('tipperPriceSetting').value);
+
+        if (isNaN(brickPrice) || brickPrice <= 0 || isNaN(tipperPrice) || tipperPrice <= 0) {
+            showToast('الرجاء إدخال أسعار صالحة (أرقام موجبة)', 'danger');
+            return;
+        }
+
+        settings = { brickPrice: brickPrice, tipperPrice: tipperPrice };
+        localStorage.setItem('factorySettings', JSON.stringify(settings));
+        updateBrickPriceDropdown();
+        updateTipperPriceDisplay();
+        showToast('تم حفظ إعدادات الأسعار بنجاح!', 'success');
+    }
+
+    function updateBrickPriceDropdown() {
+        const select = document.getElementById('brickPrice');
+        if (!select) return;
+        select.innerHTML = '';
+        const optionText = `طوب (${settings.brickPrice} ج.م)`;
+        const option = new Option(optionText, settings.brickPrice);
+        option.selected = true;
+        select.add(option);
+        select.disabled = true;
+    }
+
+     function updateTipperPriceDisplay() {
+        const displayInput = document.getElementById('truckPriceDisplay');
+        if(displayInput) {
+            displayInput.value = `${formatNumber(settings.tipperPrice)} ج.م`;
+        }
+     }
+
+    // --- Form Handling ---
+    function toggleOperationFields(type) {
+        // Hide all field containers first
+        document.querySelectorAll('#productionForm [id$="Fields"]')
+                .forEach(field => field?.classList.add('hidden'));
+
+        updateTipperPriceDisplay();
+
+        let elementToShowId = null;
+        switch(type) {
+            case 'طوب':      elementToShowId = 'brickFields'; break;
+            case 'قلاب':     elementToShowId = 'truckFields'; break;
+            case 'سمنت':     elementToShowId = 'cementFields'; break;
+            case 'نقل طوب':  elementToShowId = 'transportFields'; break;
+            default: return; // No fields to show
+        }
+
+        const elementToShow = document.getElementById(elementToShowId);
+        if (elementToShow) {
+            elementToShow.classList.remove('hidden');
+        } else {
+            console.error(`Element with ID '${elementToShowId}' not found!`);
+            showToast(`خطأ: لم يتم العثور على حقول '${type}'.`, 'danger');
+        }
+    }
+
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const type = document.getElementById('operationType').value;
+      const operationDate = document.getElementById('operationDate').value;
+      const notes = document.getElementById('operationNotes').value;
+      let quantity, price, total;
+      // Removed destination variable
+
+      if(!type) { showToast('الرجاء اختيار نوع العملية', 'warning'); return; }
+      if(!operationDate) { showToast('الرجاء إدخال التاريخ', 'warning'); return; }
+
+      try {
+          switch(type) {
+            case 'طوب':
+              quantity = parseInt(document.getElementById('brickQuantity').value);
+              price = settings.brickPrice;
+              if (!quantity || quantity <= 0) throw new Error('كمية الطوب غير صالحة');
+              if (!price || price <= 0) throw new Error('سعر الطوب من الإعدادات غير صالح!');
+              total = quantity * price;
+              break;
+            case 'قلاب':
+              quantity = parseInt(document.getElementById('truckTrips').value);
+              price = settings.tipperPrice;
+              if (!quantity || quantity <= 0) throw new Error('عدد القلابات غير صالح');
+              total = quantity * price;
+              break;
+            case 'سمنت':
+              quantity = parseFloat(document.getElementById('cementQuantity').value); // Quantity is now number of bags
+              price = parseFloat(document.getElementById('cementPrice').value); // Price is per bag
+              if (!quantity || quantity <= 0 || !price || price <= 0) throw new Error('بيانات السمنت غير صالحة');
+              total = quantity * price;
+              break;
+            case 'نقل طوب':
+              quantity = parseInt(document.getElementById('transportQuantity').value);
+              total = parseFloat(document.getElementById('transportCost').value); // Total cost of transport
+              price = 0; // Keep internal price 0, calculate unit price for display only
+              // Destination removed
+              if (!quantity || quantity <= 0 || !total || total <= 0) throw new Error('بيانات نقل الطوب غير صالحة');
+              break;
+            default:
+                throw new Error('نوع عملية غير معروف');
+          }
+      } catch (error) {
+          showToast(error.message, 'danger');
+          return;
+      }
+
+      // Updated operation object (no destination)
+      const operation = {
+        id: currentEditId || Date.now().toString(),
+        type: type,
+        quantity: quantity,
+        price: price, // Note: For transport, this is 0 internally
+        total: total,
+        date: operationDate,
+        notes: notes,
+        // destination property removed
+        createdBy: currentUser,
+        createdAt: currentEditId ? operations.find(op => op.id === currentEditId)?.createdAt : new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+
+      if(currentEditId) {
+        const index = operations.findIndex(op => op.id === currentEditId);
+        if(index !== -1) operations[index] = operation;
+        showToast('تم تعديل العملية بنجاح', 'success');
+        currentEditId = null;
+      } else {
+        operations.push(operation);
+        showToast('تم إضافة العملية بنجاح', 'success');
+      }
+
+      saveData();
+      renderTable();
+      updateStats();
+      resetForm();
+    }
+
+    function resetForm() {
+        document.getElementById('productionForm').reset();
+        document.getElementById('operationDate').valueAsDate = new Date();
+        document.querySelectorAll('#productionForm [id$="Fields"]').forEach(field => field?.classList.add('hidden'));
+        document.getElementById('operationType').value = '';
+        currentEditId = null;
+        updateTipperPriceDisplay();
+        updateBrickPriceDropdown();
+    }
+
+    // --- Data Management ---
+    function saveData() {
+        localStorage.setItem('factoryData', JSON.stringify(operations));
+    }
+
+    function getFilteredData() {
+        let dataToRender = [...operations];
+
+        // Apply date filter
+        const now = new Date();
+        const today = now.toISOString().split('T')[0];
+        const startOfWeek = new Date(now); startOfWeek.setDate(now.getDate() - now.getDay()); startOfWeek.setHours(0,0,0,0);
+        const endOfWeek = new Date(now); endOfWeek.setDate(now.getDate() + (6 - now.getDay())); endOfWeek.setHours(23,59,59,999);
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+        const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0); endOfMonth.setHours(23,59,59,999);
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+
+        switch(currentFilter) {
+            case 'day': dataToRender = dataToRender.filter(op => op.date === today); break;
+            case 'week': dataToRender = dataToRender.filter(op => { const d = new Date(op.date); return d >= startOfWeek && d <= endOfWeek; }); break;
+            case 'month': dataToRender = dataToRender.filter(op => { const d = new Date(op.date); return d >= startOfMonth && d <= endOfMonth; }); break;
+            case 'custom':
+                if (startDate && endDate) {
+                    const start = new Date(startDate); start.setHours(0,0,0,0);
+                    const end = new Date(endDate); end.setHours(23,59,59,999);
+                    dataToRender = dataToRender.filter(op => { const d = new Date(op.date); return d >= start && d <= end; });
+                } break;
+        }
+
+        // Apply search filter (destination removed)
+        const query = document.getElementById('searchInput').value.toLowerCase().trim();
+        if (query) {
+            dataToRender = dataToRender.filter(op =>
+                op.type.toLowerCase().includes(query) ||
+                (op.notes && op.notes.toLowerCase().includes(query)) ||
+                // destination removed from search
+                op.date.includes(query) ||
+                (op.createdBy && op.createdBy.toLowerCase().includes(query)) ||
+                String(op.quantity).includes(query) ||
+                String(op.total).includes(query)
+            );
+        }
+
+        // Apply sorting
+        if (currentSortColumn !== -1) {
+            dataToRender.sort((a, b) => {
+                let valA, valB;
+                switch(currentSortColumn) {
+                  case 0: valA = a.type; valB = b.type; return valA.localeCompare(valB) * sortDirection;
+                  case 1: valA = a.quantity; valB = b.quantity; break;
+                  case 2: // Calculate unit price for transport for sorting comparison
+                        valA = (a.type === 'نقل طوب' && a.quantity > 0) ? a.total / a.quantity : a.price;
+                        valB = (b.type === 'نقل طوب' && b.quantity > 0) ? b.total / b.quantity : b.price;
+                        break;
+                  case 3: valA = a.total; valB = b.total; break;
+                  case 4: valA = new Date(a.date); valB = new Date(b.date); break;
+                  default: return 0;
+                }
+                 valA = valA ?? (typeof valA === 'number' ? 0 : '');
+                 valB = valB ?? (typeof valB === 'number' ? 0 : '');
+                 if (valA < valB) return -1 * sortDirection;
+                 if (valA > valB) return 1 * sortDirection;
+                 return 0;
+            });
+        }
+        return dataToRender;
+    }
+
+
+    // --- Table Rendering & Pagination ---
+    function renderTable() {
+      const data = getFilteredData();
+      const tbody = document.getElementById('tableBody');
+      tbody.innerHTML = '';
+
+      const start = (currentPage - 1) * rowsPerPage;
+      const end = start + rowsPerPage;
+      const paginatedData = data.slice(start, end);
+
+      if(paginatedData.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 20px;">لا توجد بيانات لعرضها حسب الفلترة الحالية.</td></tr>`;
+      } else {
+          paginatedData.forEach(op => {
+            const row = document.createElement('tr');
+            let displayPrice = formatNumber(op.price) + ' ج.م';
+            let displayNotes = op.notes || '-'; // Notes only (no destination)
+            let displayQuantity = formatNumber(op.quantity);
+
+            // Adjust display based on type
+            if(op.type === 'نقل طوب') {
+                // Calculate and display unit price for transport
+                const unitPrice = op.quantity > 0 ? op.total / op.quantity : 0;
+                displayPrice = formatNumber(unitPrice.toFixed(2)) + ' ج.م / طوبة'; // Show calculated price
+                displayQuantity = `${formatNumber(op.quantity)} طوبة`;
+                // displayNotes is already set correctly above
+            } else if (op.type === 'قلاب') {
+                 displayPrice = `${formatNumber(op.price)} ج.م / قلاب`;
+                 displayQuantity = `${formatNumber(op.quantity)} قلاب`;
+            } else if (op.type === 'سمنت') {
+                 displayPrice = `${formatNumber(op.price)} ج.م / كيس`; // Updated unit
+                 displayQuantity = `${formatNumber(op.quantity)} كيس`; // Updated unit
+            } else if (op.type === 'طوب') {
+                 displayPrice = `${formatNumber(op.price)} ج.م / طوبة`;
+                 displayQuantity = `${formatNumber(op.quantity)} طوبة`;
+            }
+
+            row.innerHTML = `
+              <td>${op.type}</td>
+              <td>${displayQuantity}</td>
+              <td>${displayPrice}</td>
+              <td>${formatNumber(op.total)} ج.م</td>
+              <td>${formatDate(op.date)}</td>
+              <td>${displayNotes}</td> <td>
+                <button class="btn btn-info btn-sm" onclick="editOperation('${op.id}')">
+                  <i class="fas fa-edit"></i> تعديل
+                </button>
+                <button class="btn btn-danger btn-sm" onclick="deleteOperation('${op.id}')">
+                  <i class="fas fa-trash"></i> حذف
+                </button>
+              </td>
+            `;
+            tbody.appendChild(row);
+          });
+      }
+      updatePaginationInfo(data.length);
+    }
+
+    function updatePaginationInfo(totalItems) {
+      let totalPages = Math.ceil(totalItems / rowsPerPage);
+      totalPages = totalPages > 0 ? totalPages : 1;
+      currentPage = Math.min(currentPage, totalPages);
+      currentPage = Math.max(currentPage, 1);
+
+      document.getElementById('paginationInfo').textContent =
+        `الصفحة ${currentPage} من ${totalPages} - إجمالي العناصر: ${totalItems}`;
+
+      document.getElementById('prevBtn').disabled = currentPage <= 1;
+      document.getElementById('nextBtn').disabled = currentPage >= totalPages;
+    }
+
+    function nextPage() {
+        const totalItems = getFilteredData().length;
+        const totalPages = Math.ceil(totalItems / rowsPerPage);
+        if (currentPage < totalPages) {
+            currentPage++;
+            renderTable();
+        }
+    }
+
+    function prevPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            renderTable();
+        }
+    }
+
+    function sortTable(columnIndex) {
+        if (currentSortColumn === columnIndex) {
+            sortDirection *= -1;
+        } else {
+            currentSortColumn = columnIndex;
+            sortDirection = 1;
+        }
+        currentPage = 1;
+        renderTable();
+    }
+
+    // --- CRUD Operations ---
+    function editOperation(id) {
+      const operation = operations.find(op => op.id === id);
+      if(!operation) return;
+
+      currentEditId = id;
+      document.getElementById('operationType').value = operation.type;
+      toggleOperationFields(operation.type);
+
+      // Populate fields (destination removed)
+      switch(operation.type) {
+        case 'طوب':
+          document.getElementById('brickQuantity').value = operation.quantity;
+          break;
+        case 'قلاب':
+          document.getElementById('truckTrips').value = operation.quantity;
+          break;
+        case 'سمنت':
+          document.getElementById('cementQuantity').value = operation.quantity;
+          document.getElementById('cementPrice').value = operation.price;
+          break;
+        case 'نقل طوب':
+           document.getElementById('transportQuantity').value = operation.quantity;
+           document.getElementById('transportCost').value = operation.total;
+           // No destination field to populate
+           break;
+      }
+
+      document.getElementById('operationDate').value = operation.date;
+      document.getElementById('operationNotes').value = operation.notes || '';
+      document.getElementById('productionForm')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function deleteOperation(id) {
+      if(!confirm('هل أنت متأكد من حذف هذه العملية؟ لا يمكن التراجع عن هذا الإجراء.')) return;
+
+      operations = operations.filter(op => op.id !== id);
+      saveData();
+      const totalItems = getFilteredData().length;
+      const totalPages = Math.ceil(totalItems / rowsPerPage);
+      currentPage = Math.min(currentPage, totalPages > 0 ? totalPages : 1);
+      currentPage = Math.max(currentPage, 1);
+      renderTable();
+      updateStats();
+      showToast('تم حذف العملية بنجاح', 'success');
+    }
+
+    // --- Statistics ---
+    function updateStats() {
+      const totalOps = operations.length;
+      const totalBricksProduced = operations.filter(op => op.type === 'طوب').reduce((sum, op) => sum + op.quantity, 0);
+      const totalSandTrips = operations.filter(op => op.type === 'قلاب').reduce((sum, op) => sum + op.quantity, 0);
+      const totalCementBags = operations.filter(op => op.type === 'سمنت').reduce((sum, op) => sum + op.quantity, 0); // Now bags
+      const totalTransportCost = operations.filter(op => op.type === 'نقل طوب').reduce((sum, op) => sum + op.total, 0);
+      const totalValueCost = operations.reduce((sum, op) => sum + (op.total || 0), 0);
+
+      document.getElementById('totalOperations').textContent = formatNumber(totalOps);
+      document.getElementById('totalBricks').textContent = formatNumber(totalBricksProduced);
+      document.getElementById('totalTrips').textContent = formatNumber(totalSandTrips);
+      document.getElementById('totalCement').textContent = formatNumber(totalCementBags); // Displaying bag count
+      document.getElementById('totalTransportCost').textContent = formatNumber(totalTransportCost) + ' ج.م';
+      document.getElementById('totalValue').textContent = formatNumber(totalValueCost) + ' ج.م';
+    }
+
+    // --- Filtering and Searching ---
+    function filterData(period) {
+        currentFilter = period;
+        currentPage = 1;
+        renderTable();
+        let filterDesc = { day: 'اليوم', week: 'الأسبوع الحالي', month: 'الشهر الحالي', all: 'الكل' }[period];
+        showToast(`عرض بيانات ${filterDesc}`, 'info');
+    }
+
+    function filterByCustomDate() {
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        if(!startDate || !endDate) { showToast('الرجاء تحديد تاريخ البداية والنهاية', 'warning'); return; }
+        if (new Date(startDate) > new Date(endDate)) { showToast('تاريخ البداية يجب أن يكون قبل تاريخ النهاية', 'warning'); return; }
+        currentFilter = 'custom';
+        currentPage = 1;
+        renderTable();
+        showToast(`عرض البيانات بين ${formatDate(startDate)} و ${formatDate(endDate)}`, 'info');
+    }
+
+    function filterBySearch(query) {
+        currentPage = 1;
+        renderTable();
+    }
+
+    // --- Import/Export ---
+    function exportCSV() {
+      const dataToExport = getFilteredData();
+      if(dataToExport.length === 0) {
+        showToast('لا توجد بيانات للتصدير حسب الفلترة الحالية', 'warning');
+        return;
+      }
+
+      // Updated headers (no destination)
+      const headers = ['النوع', 'الكمية', 'السعر/للوحدة', 'القيمة/التكلفة', 'التاريخ', 'الملاحظات', 'تم الإنشاء بواسطة', 'تاريخ الإنشاء', 'تاريخ آخر تعديل'];
+      const rows = dataToExport.map(op => {
+        // Calculate unit price for transport rows for export
+        let unitPrice = op.price;
+        if (op.type === 'نقل طوب' && op.quantity > 0) {
+            unitPrice = (op.total / op.quantity).toFixed(2);
+        }
+        return [
+            op.type,
+            op.quantity,
+            unitPrice, // Export calculated unit price for transport, or original price for others
+            op.total,
+            op.date,
+            // destination removed
+            op.notes || '',
+            op.createdBy || 'غير معروف',
+            op.createdAt ? new Date(op.createdAt).toLocaleString('ar-EG') : '-',
+            op.updatedAt ? new Date(op.updatedAt).toLocaleString('ar-EG') : '-'
+        ];
+      });
+
+
+      let csvContent = "\uFEFF";
+      csvContent += headers.join(',') + '\n';
+      csvContent += rows.map(row => row.map(field => `"${String(field ?? '').replace(/"/g, '""')}"`).join(',')).join('\n');
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `تقرير_مصنع_طوب_${new Date().toISOString().slice(0,10)}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      showToast('تم التصدير إلى CSV بنجاح', 'success');
+    }
+
+    function importCSV(file) {
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const content = e.target.result;
+          const lines = content.split(/\r?\n/).filter(line => line.trim() !== '');
+          if(lines.length < 2) throw new Error('ملف CSV فارغ أو غير صالح');
+
+          const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+          const requiredHeaders = ['النوع', 'الكمية', 'القيمة/التكلفة', 'التاريخ'];
+          // Optional but common headers: 'السعر/للوحدة', 'الملاحظات'
+          if (!requiredHeaders.every(h => headers.includes(h))) {
+              throw new Error(`ملف CSV يجب أن يحتوي على الأعمدة الأساسية على الأقل: ${requiredHeaders.join(', ')}`);
+          }
+          const headerIndex = {};
+          headers.forEach((h, i) => headerIndex[h] = i);
+
+          const newOperations = [];
+          const existingOpsSet = new Set(operations.map(op => `${op.type}-${op.quantity}-${op.total}-${op.date}`));
+
+          for(let i = 1; i < lines.length; i++) {
+             const values = [];
+             let currentVal = ''; let inQuotes = false;
+             for (const char of lines[i]) {
+                 if (char === '"' && !inQuotes) { inQuotes = true; }
+                 else if (char === '"' && inQuotes) { inQuotes = false; }
+                 else if (char === ',' && !inQuotes) { values.push(currentVal.trim()); currentVal = ''; }
+                 else { currentVal += char; }
+             }
+             values.push(currentVal.trim());
+
+             if(values.length !== headers.length) {
+                 console.warn(`Skipping line ${i+1}: Incorrect column count (${values.length} vs ${headers.length})`);
+                 continue;
+             }
+
+            const type = values[headerIndex['النوع']];
+            const quantity = parseFloat(values[headerIndex['الكمية']]);
+            const total = parseFloat(values[headerIndex['القيمة/التكلفة']]);
+            const date = values[headerIndex['التاريخ']];
+            // Price is optional/derived for some types during import
+            let price = parseFloat(values[headerIndex['السعر/للوحدة']]);
+             if (isNaN(price)) {
+                 // Attempt to derive price if missing/invalid, or set default
+                 if (type === 'طوب') price = settings.brickPrice;
+                 else if (type === 'قلاب') price = settings.tipperPrice;
+                 else if (type === 'نقل طوب') price = 0; // Internal price is 0 for transport
+                 else price = 0; // Default for cement or others if price missing
+             }
+
+            const notes = values[headerIndex['الملاحظات']];
+            const createdBy = values[headerIndex['تم الإنشاء بواسطة']];
+            const createdAt = values[headerIndex['تاريخ الإنشاء']];
+            const updatedAt = values[headerIndex['تاريخ آخر تعديل']];
+            // Destination removed
+
+            if (!type || isNaN(quantity) || quantity <= 0 || isNaN(total) || !date) {
+                console.warn(`Skipping line ${i+1}: Invalid essential data`);
+                continue;
+            }
+
+            const opHash = `${type}-${quantity}-${total}-${date}`;
+            if (existingOpsSet.has(opHash)) {
+                 console.warn(`Skipping line ${i+1}: Possible duplicate`);
+                 continue;
+            }
+
+            const operation = {
+              id: Date.now().toString() + i, type: type, quantity: quantity,
+              price: price, total: total, date: date, notes: notes || '',
+              // destination removed
+              createdBy: createdBy || currentUser,
+              createdAt: createdAt ? new Date(createdAt).toISOString() : new Date().toISOString(),
+              updatedAt: updatedAt ? new Date(updatedAt).toISOString() : new Date().toISOString(),
+            };
+            newOperations.push(operation);
+            existingOpsSet.add(opHash);
+          }
+
+          if(newOperations.length === 0) {
+            showToast('لم يتم العثور على عمليات جديدة أو صالحة للاستيراد.', 'warning');
+          } else {
+              operations = [...operations, ...newOperations];
+              saveData();
+              currentPage = 1;
+              renderTable();
+              updateStats();
+              showToast(`تم استيراد ${newOperations.length} عملية جديدة بنجاح`, 'success');
+          }
+        } catch (error) {
+          showToast(`خطأ في استيراد CSV: ${error.message}`, 'danger');
+          console.error("CSV Import Error:", error);
+        } finally {
+            document.getElementById('csvFile').value = '';
+        }
+      };
+      reader.onerror = function() {
+        showToast('حدث خطأ أثناء قراءة الملف', 'danger');
+        document.getElementById('csvFile').value = '';
+      };
+      reader.readAsText(file, 'UTF-8');
+    }
+
+    function exportPDF() {
+        showToast('ميزة تصدير PDF لم يتم تنفيذها بعد.', 'info');
+    }
+
+    // --- Utilities ---
+    function showToast(message, type = 'info') {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.className = 'show';
+        const colors = { primary: '#3498db', success: '#2ecc71', danger: '#e74c3c', warning: '#f39c12', info: '#1abc9c' };
+        toast.style.backgroundColor = colors[type] || colors.info;
+        if (toast.timeoutId) clearTimeout(toast.timeoutId);
+        toast.timeoutId = setTimeout(() => {
+            toast.className = toast.className.replace("show", "");
+            toast.timeoutId = null;
+        }, 3000);
+    }
+
+    function formatNumber(num) {
+        if (num === null || num === undefined || isNaN(num)) return '-';
+        // Format with Arabic numerals (Sudan uses standard Arabic numerals)
+        // Use toLocaleString without specific locale to use browser default, often handles local numerals
+        // Or force 'ar-EG' if needed for consistency, although 'ar-SD' isn't widely supported for number formatting
+         return num.toLocaleString('ar-EG', { minimumFractionDigits: num % 1 !== 0 ? 2 : 0, maximumFractionDigits: 2 });
+        //return num.toLocaleString(undefined, { minimumFractionDigits: num % 1 !== 0 ? 2 : 0, maximumFractionDigits: 2 });
+
+    }
+
+    function formatDate(dateString) {
+        if (!dateString) return '-';
+        try {
+            const date = new Date(dateString);
+            if (isNaN(date.getTime())) return dateString;
+            // Use standard Arabic date format common in Sudan
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return date.toLocaleDateString('ar-SD', options); // Use Sudan locale if supported, fallback ar
+        } catch (e) {
+             try { // Fallback to generic Arabic
+                 const options = { year: 'numeric', month: 'short', day: 'numeric' };
+                 return new Date(dateString).toLocaleDateString('ar', options);
+             } catch (e2) {
+                 return dateString; // Return original if all formatting fails
+             }
+        }
+    }
+
+  </script>
+
+</body>
+</html>
